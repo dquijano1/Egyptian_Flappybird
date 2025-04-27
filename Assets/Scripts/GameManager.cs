@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playButton;
     [SerializeField] private GameObject gameOver;
 
+    [SerializeField] private GameObject getReady;
+    [SerializeField] private GameObject prompt_panel;
+    
+    [SerializeField] 
     public int score { get; private set; } = 0;
 
     private void Awake()
@@ -22,6 +27,11 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
     }
+    private IEnumerator HidePromptPanelAfterDelay(float delay)
+    {
+    yield return new WaitForSeconds(delay);
+    prompt_panel.SetActive(false);
+    }
 
     private void OnDestroy()
     {
@@ -31,7 +41,10 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
+    {   
+        prompt_panel.SetActive(false);
+        gameOver.SetActive(false);
+        getReady.SetActive(true);
         Pause();
     }
 
@@ -45,8 +58,9 @@ public class GameManager : MonoBehaviour
     {
         score = 0;
         scoreText.text = score.ToString();
-
+        getReady.SetActive(false);
         playButton.SetActive(false);
+        prompt_panel.SetActive(true);
         gameOver.SetActive(false);
 
         Time.timeScale = 1f;
@@ -57,6 +71,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < pipes.Length; i++) {
             Destroy(pipes[i].gameObject);
         }
+        StartCoroutine(HidePromptPanelAfterDelay(5f));
     }
 
     public void GameOver()
@@ -68,7 +83,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void IncreaseScore()
-    {
+    {   
+        
         score++;
         scoreText.text = score.ToString();
     }

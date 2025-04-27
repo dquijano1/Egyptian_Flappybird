@@ -64,7 +64,11 @@ public class Player : MonoBehaviour
             
             GameManager.Instance.GameOver();
         } else if (other.gameObject.CompareTag("Scoring")) {
+            Transform coin = other.transform.Find("Coin");
             GameManager.Instance.IncreaseScore();
+            if (coin != null){
+                Destroy(coin.gameObject);
+            }
         }
     }
 

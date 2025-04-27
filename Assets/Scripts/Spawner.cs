@@ -10,7 +10,8 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
-        InvokeRepeating(nameof(Spawn), spawnRate, spawnRate);
+        float initialDelay = spawnRate * 2f;
+        InvokeRepeating(nameof(Spawn), initialDelay, spawnRate);
     }
 
     private void OnDisable()

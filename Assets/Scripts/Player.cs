@@ -70,6 +70,10 @@ public class Player : MonoBehaviour
                 Destroy(coin.gameObject);
             }
         }
+        else if(other.CompareTag("Chalice")){
+            GameManager.Instance.GameWon();
+
+        }
     }
 
 }

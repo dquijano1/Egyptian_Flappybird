@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject getReady;
     [SerializeField] private GameObject prompt_panel;
+    [SerializeField] private GameObject winMessage;  
+    [SerializeField] private GameObject restartButton;
+    [SerializeField] private GameObject chalice;
+
     
-    [SerializeField] 
     public int score { get; private set; } = 0;
 
     private void Awake()
@@ -42,9 +45,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {   
+        restartButton.SetActive(false);
         prompt_panel.SetActive(false);
         gameOver.SetActive(false);
         getReady.SetActive(true);
+        winMessage.SetActive(false);
         Pause();
     }
 
@@ -57,12 +62,13 @@ public class GameManager : MonoBehaviour
     public void Play()
     {
         score = 0;
+        spawner.StartSpawning();
         scoreText.text = score.ToString();
         getReady.SetActive(false);
         playButton.SetActive(false);
         prompt_panel.SetActive(true);
         gameOver.SetActive(false);
-
+        winMessage.SetActive(false);  
         Time.timeScale = 1f;
         player.enabled = true;
 
@@ -82,11 +88,47 @@ public class GameManager : MonoBehaviour
         Pause();
     }
 
+    public void GameWon()
+    {
+        winMessage.SetActive(true);
+        restartButton.SetActive(true);
+        Pause();
+        
+    }
+
+    public void RestartGame()
+    {
+        
+        score = 0;
+        scoreText.text = score.ToString();
+
+
+        ResetChalice();
+
+       
+        winMessage.SetActive(false);
+        restartButton.SetActive(false);
+
+
+        Play(); 
+    }
+
+     private void ResetChalice()
+    {
+        
+        if (chalice != null) {
+            chalice.transform.position = new Vector3(7.83f, -0.563f, 0.5177682f);
+        }
+    }
+
     public void IncreaseScore()
     {   
-        
         score++;
         scoreText.text = score.ToString();
+        if (score >= 10)
+        {
+            spawner.StopSpawning();
+        }
     }
 
 }
